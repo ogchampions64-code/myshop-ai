@@ -1,0 +1,802 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NovaIA — Boutique de services Web &amp; IA</title>
+<meta name="description" content="Sites web, formations informatique & IA, programmation 3D avec IA et code IA prêt à l'emploi. Paiement 100% sécurisé via Stripe.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop offset='0' stop-color='%237c5cff'/%3E%3Cstop offset='1' stop-color='%2322d3ee'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='100' height='100' rx='24' fill='%2307071a'/%3E%3Cpath d='M54 12 26 56h20l-8 32 34-44H50z' fill='url(%23g)'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Sora:wght@600;700;800&display=swap" rel="stylesheet">
+<script src="config.js"></script>
+<style>
+/* ═══════════════════════════ BASE ═══════════════════════════ */
+:root{
+  --bg:#05050f;
+  --bg-2:#0a0a22;
+  --card:rgba(255,255,255,.045);
+  --card-hover:rgba(255,255,255,.075);
+  --border:rgba(255,255,255,.11);
+  --txt:#eef0ff;
+  --muted:#9aa0c8;
+  --violet:#7c5cff;
+  --cyan:#22d3ee;
+  --pink:#f472b6;
+  --grad:linear-gradient(90deg,#7c5cff,#22d3ee);
+  --grad-3:linear-gradient(90deg,#7c5cff,#f472b6,#22d3ee);
+  --radius:18px;
+  --font-head:'Sora',system-ui,-apple-system,'Segoe UI',sans-serif;
+  --font-body:'Inter',system-ui,-apple-system,'Segoe UI',sans-serif;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  font-family:var(--font-body);
+  background:var(--bg);
+  color:var(--txt);
+  line-height:1.65;
+  overflow-x:hidden;
+  -webkit-font-smoothing:antialiased;
+}
+section{scroll-margin-top:96px}
+img,svg{display:block}
+a{color:inherit;text-decoration:none}
+ul{list-style:none}
+::selection{background:rgba(124,92,255,.4)}
+
+/* ═════════════════════ FOND AURORA ═════════════════════ */
+.aurora{position:fixed;inset:0;z-index:-2;overflow:hidden;pointer-events:none}
+.aurora::after{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 50% -20%,rgba(124,92,255,.16),transparent 60%)}
+.blob{position:absolute;border-radius:50%;filter:blur(90px);opacity:.45;will-change:transform}
+.blob-1{width:42vw;height:42vw;left:-10vw;top:-8vw;background:radial-gradient(circle,#7c5cff,transparent 65%);animation:float1 22s ease-in-out infinite}
+.blob-2{width:36vw;height:36vw;right:-8vw;top:22vh;background:radial-gradient(circle,#22d3ee,transparent 65%);animation:float2 26s ease-in-out infinite}
+.blob-3{width:34vw;height:34vw;left:24vw;bottom:-14vw;background:radial-gradient(circle,#f472b6,transparent 65%);animation:float3 30s ease-in-out infinite}
+@keyframes float1{0%,100%{transform:translate(0,0) scale(1)}50%{transform:translate(9vw,7vh) scale(1.15)}}
+@keyframes float2{0%,100%{transform:translate(0,0) scale(1)}50%{transform:translate(-8vw,10vh) scale(.9)}}
+@keyframes float3{0%,100%{transform:translate(0,0) scale(1)}50%{transform:translate(6vw,-9vh) scale(1.1)}}
+.grid-overlay{position:fixed;inset:0;z-index:-1;pointer-events:none;
+  background-image:linear-gradient(rgba(255,255,255,.028) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.028) 1px,transparent 1px);
+  background-size:64px 64px;
+  mask-image:radial-gradient(ellipse at 50% 0%,#000 30%,transparent 75%);
+  -webkit-mask-image:radial-gradient(ellipse at 50% 0%,#000 30%,transparent 75%);
+}
+
+/* ═════════════════════ BARRE DE PROGRESS ═════════════════════ */
+#progress{position:fixed;top:0;left:0;height:3px;width:0;background:var(--grad-3);background-size:200% 100%;z-index:1200;animation:gradShift 6s linear infinite;box-shadow:0 0 12px rgba(124,92,255,.8)}
+
+/* ═════════════════════ HEADER ═════════════════════ */
+header{
+  position:fixed;top:0;left:0;right:0;z-index:1000;
+  display:flex;align-items:center;justify-content:space-between;
+  padding:22px 6%;transition:all .4s ease;
+}
+header.scrolled{
+  padding:12px 6%;
+  background:rgba(7,7,26,.78);
+  backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);
+  border-bottom:1px solid var(--border);
+}
+.logo{display:flex;align-items:center;gap:10px;font-family:var(--font-head);font-weight:800;font-size:1.35rem;letter-spacing:.5px}
+.logo .mark{width:34px;height:34px;flex:none}
+.logo .accent{background:var(--grad);background-size:200% 100%;animation:gradShift 6s linear infinite;-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+@keyframes gradShift{to{background-position:200% 0}}
+.nav-links{display:flex;gap:34px;align-items:center}
+.nav-links a{font-size:.95rem;font-weight:500;color:var(--muted);position:relative;transition:color .3s}
+.nav-links a::after{content:'';position:absolute;left:0;bottom:-6px;width:100%;height:2px;background:var(--grad);transform:scaleX(0);transform-origin:right;transition:transform .35s cubic-bezier(.22,.8,.3,1)}
+.nav-links a:hover{color:var(--txt)}
+.nav-links a:hover::after{transform:scaleX(1);transform-origin:left}
+.btn-head{padding:10px 22px;font-size:.9rem}
+.hamburger{display:none;flex-direction:column;gap:5px;background:none;border:0;cursor:pointer;padding:6px;z-index:1100}
+.hamburger span{width:26px;height:2.5px;background:var(--txt);border-radius:3px;transition:all .35s ease}
+.hamburger.open span:nth-child(1){transform:translateY(7.5px) rotate(45deg)}
+.hamburger.open span:nth-child(2){opacity:0}
+.hamburger.open span:nth-child(3){transform:translateY(-7.5px) rotate(-45deg)}
+
+/* ═════════════════════ BOUTONS ═════════════════════ */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:10px;font-family:var(--font-head);font-weight:600;border-radius:14px;cursor:pointer;transition:all .35s cubic-bezier(.22,.8,.3,1);position:relative;overflow:hidden;white-space:nowrap}
+.btn-primary{
+  background:linear-gradient(90deg,#7c5cff,#5b8bff,#22d3ee);background-size:200% 100%;
+  color:#fff;padding:16px 34px;font-size:1.05rem;border:0;
+  box-shadow:0 10px 34px -10px rgba(124,92,255,.7),inset 0 1px 0 rgba(255,255,255,.25);
+}
+.btn-primary::before{content:'';position:absolute;top:0;left:-80%;width:50%;height:100%;background:linear-gradient(100deg,transparent,rgba(255,255,255,.35),transparent);transform:skewX(-25deg);transition:left .7s ease}
+.btn-primary:hover{background-position:100% 0;transform:translateY(-3px);box-shadow:0 16px 44px -10px rgba(124,92,255,.85),inset 0 1px 0 rgba(255,255,255,.25)}
+.btn-primary:hover::before{left:130%}
+.btn-ghost{background:rgba(255,255,255,.04);color:var(--txt);border:1px solid var(--border);padding:16px 30px;font-size:1.05rem}
+.btn-ghost:hover{background:rgba(255,255,255,.09);border-color:rgba(255,255,255,.25);transform:translateY(-3px)}
+.btn-ghost{backdrop-filter:blur(8px)}
+
+/* ═════════════════════ HERO ═════════════════════ */
+.hero{min-height:100vh;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;padding:140px 6% 90px;position:relative}
+.badge{display:inline-flex;align-items:center;gap:9px;padding:9px 20px;border-radius:999px;background:rgba(124,92,255,.12);border:1px solid rgba(124,92,255,.35);font-size:.85rem;font-weight:500;color:#c9c2ff;margin-bottom:26px}
+.badge .dot{width:8px;height:8px;border-radius:50%;background:#22d3ee;box-shadow:0 0 0 0 rgba(34,211,238,.6);animation:pulse 2.2s infinite}
+@keyframes pulse{0%{box-shadow:0 0 0 0 rgba(34,211,238,.55)}70%{box-shadow:0 0 0 11px rgba(34,211,238,0)}100%{box-shadow:0 0 0 0 rgba(34,211,238,0)}}
+.hero h1{font-family:var(--font-head);font-size:clamp(2.4rem,6vw,4.6rem);font-weight:800;line-height:1.12;max-width:17ch;margin-bottom:22px}
+.hero h1 .grad{background:var(--grad-3);background-size:200% 100%;animation:gradShift 5s linear infinite;-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+.type-line{font-size:clamp(1.05rem,2.4vw,1.5rem);color:var(--muted);margin-bottom:14px;min-height:1.8em}
+.type-line .typed{color:var(--cyan);font-weight:600}
+.type-line .caret{display:inline-block;width:3px;height:1.15em;background:var(--cyan);margin-left:4px;vertical-align:text-bottom;animation:blink 1s steps(1) infinite}
+@keyframes blink{50%{opacity:0}}
+.hero .sub{max-width:58ch;color:var(--muted);font-size:1.05rem;margin-bottom:38px}
+.hero-ctas{display:flex;gap:18px;flex-wrap:wrap;justify-content:center;margin-bottom:44px}
+.trust-row{display:flex;gap:10px;flex-wrap:wrap;justify-content:center}
+.trust-pill{display:inline-flex;align-items:center;gap:8px;font-size:.83rem;color:var(--muted);padding:8px 16px;border-radius:999px;background:rgba(255,255,255,.035);border:1px solid var(--border)}
+.trust-pill svg{width:14px;height:14px;stroke:var(--cyan);flex:none}
+.stats{display:flex;gap:clamp(30px,6vw,80px);justify-content:center;flex-wrap:wrap;margin-top:56px}
+.stat{text-align:center}
+.stat .n{font-family:var(--font-head);font-size:clamp(2rem,4.5vw,3rem);font-weight:800;background:var(--grad);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+.stat .l{font-size:.85rem;color:var(--muted);margin-top:2px}
+
+/* ═════════════════════ MARQUEE ═════════════════════ */
+.marquee-band{border-top:1px solid var(--border);border-bottom:1px solid var(--border);background:rgba(255,255,255,.018);padding:20px 0;overflow:hidden;position:relative}
+.marquee-band::before,.marquee-band::after{content:'';position:absolute;top:0;bottom:0;width:120px;z-index:2;pointer-events:none}
+.marquee-band::before{left:0;background:linear-gradient(90deg,var(--bg),transparent)}
+.marquee-band::after{right:0;background:linear-gradient(-90deg,var(--bg),transparent)}
+.marquee{display:flex;width:max-content;animation:marquee 32s linear infinite}
+.marquee-band:hover .marquee{animation-play-state:paused}
+.marquee span{font-family:var(--font-head);font-weight:600;font-size:.95rem;color:var(--muted);letter-spacing:.14em;text-transform:uppercase;padding:0 18px;white-space:nowrap}
+.marquee span i{font-style:normal;color:var(--violet);margin-left:36px}
+@keyframes marquee{to{transform:translateX(-50%)}}
+
+/* ═════════════════════ SECTIONS COMMUNES ═════════════════════ */
+.section{padding:110px 6%;max-width:1240px;margin:0 auto}
+.section-head{text-align:center;margin-bottom:64px}
+.kicker{display:inline-block;font-size:.8rem;font-weight:600;letter-spacing:.22em;text-transform:uppercase;color:var(--cyan);margin-bottom:14px}
+.section-head h2{font-family:var(--font-head);font-size:clamp(1.8rem,4vw,2.8rem);font-weight:800;line-height:1.2;margin-bottom:16px}
+.section-head p{color:var(--muted);max-width:60ch;margin:0 auto}
+
+/* ═════════════════════ SERVICES / BOUTIQUE ═════════════════════ */
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(270px,1fr));gap:26px}
+.card{
+  background:var(--card);border:1px solid var(--border);border-radius:var(--radius);
+  padding:34px 28px;position:relative;overflow:hidden;
+  display:flex;flex-direction:column;
+  transition:transform .45s cubic-bezier(.22,.8,.3,1),box-shadow .45s,border-color .45s,background .45s;
+}
+.card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:var(--grad);transform:scaleX(0);transform-origin:left;transition:transform .5s cubic-bezier(.22,.8,.3,1)}
+.card:hover{transform:translateY(-10px);background:var(--card-hover);border-color:rgba(124,92,255,.45);box-shadow:0 26px 60px -22px rgba(124,92,255,.5)}
+.card:hover::before{transform:scaleX(1)}
+.card .icon{
+  width:58px;height:58px;border-radius:16px;flex:none;margin-bottom:22px;
+  background:linear-gradient(135deg,rgba(124,92,255,.9),rgba(34,211,238,.75));
+  display:flex;align-items:center;justify-content:center;
+  box-shadow:0 10px 26px -8px rgba(124,92,255,.6),inset 0 1px 0 rgba(255,255,255,.35);
+  transition:transform .5s cubic-bezier(.34,1.6,.5,1);
+}
+.card:hover .icon{transform:rotate(-8deg) scale(1.08)}
+.card .icon svg{width:27px;height:27px;stroke:#fff;stroke-width:1.8;fill:none;stroke-linecap:round;stroke-linejoin:round}
+.card h3{font-family:var(--font-head);font-size:1.28rem;font-weight:700;margin-bottom:10px}
+.card .desc{color:var(--muted);font-size:.93rem;margin-bottom:20px}
+.card .feat{margin-bottom:24px;flex:1}
+.card .feat li{display:flex;gap:10px;align-items:flex-start;font-size:.9rem;color:#c7cbe8;margin-bottom:9px}
+.card .feat svg{width:16px;height:16px;stroke:var(--cyan);stroke-width:2.2;fill:none;stroke-linecap:round;stroke-linejoin:round;flex:none;margin-top:4px}
+.card .price{display:flex;align-items:baseline;gap:8px;margin-bottom:18px}
+.card .price .from{font-size:.78rem;color:var(--muted)}
+.card .price .val{font-family:var(--font-head);font-size:1.85rem;font-weight:800}
+.card .price .ttc{font-size:.72rem;color:var(--muted)}
+.btn-commander{width:100%;padding:14px 20px;font-size:1rem}
+.cards-note{text-align:center;color:var(--muted);font-size:.88rem;margin-top:30px}
+.cards-note a{color:var(--cyan);text-decoration:underline;text-underline-offset:3px}
+
+/* ═════════════════════ PROCESS ═════════════════════ */
+.steps{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:26px;position:relative}
+.step{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:38px 28px;text-align:center;transition:transform .45s cubic-bezier(.22,.8,.3,1),border-color .45s,background .45s}
+.step:hover{transform:translateY(-8px);border-color:rgba(34,211,238,.45);background:var(--card-hover)}
+.step .num{
+  width:54px;height:54px;border-radius:50%;margin:0 auto 20px;
+  font-family:var(--font-head);font-weight:800;font-size:1.25rem;color:#fff;
+  display:flex;align-items:center;justify-content:center;
+  background:linear-gradient(135deg,var(--violet),var(--cyan));
+  box-shadow:0 10px 26px -8px rgba(124,92,255,.55);
+  animation:bob 4s ease-in-out infinite;
+}
+.step:nth-child(2) .num{animation-delay:.5s}
+.step:nth-child(3) .num{animation-delay:1s}
+@keyframes bob{0%,100%{transform:translateY(0)}50%{transform:translateY(-7px)}}
+.step h3{font-family:var(--font-head);font-size:1.15rem;margin-bottom:10px}
+.step p{color:var(--muted);font-size:.92rem}
+.pay-badges{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin-top:22px}
+.pay-badges span{font-size:.75rem;font-weight:600;letter-spacing:.06em;padding:6px 13px;border-radius:8px;background:rgba(255,255,255,.05);border:1px solid var(--border);color:var(--muted)}
+
+/* ═════════════════════ FAQ ═════════════════════ */
+.faq-wrap{display:grid;grid-template-columns:1.6fr 1fr;gap:26px;align-items:start}
+.faq-list{display:flex;flex-direction:column;gap:14px}
+.faq-item{background:var(--card);border:1px solid var(--border);border-radius:14px;overflow:hidden;transition:border-color .35s,background .35s}
+.faq-item.open{border-color:rgba(124,92,255,.45);background:var(--card-hover)}
+.faq-q{
+  width:100%;display:flex;justify-content:space-between;align-items:center;gap:16px;
+  padding:20px 24px;background:none;border:0;cursor:pointer;text-align:left;
+  font-family:var(--font-head);font-weight:600;font-size:1rem;color:var(--txt);
+}
+.faq-q .chev{width:20px;height:20px;flex:none;stroke:var(--cyan);stroke-width:2.2;fill:none;stroke-linecap:round;stroke-linejoin:round;transition:transform .4s cubic-bezier(.22,.8,.3,1)}
+.faq-item.open .chev{transform:rotate(180deg)}
+.faq-a{max-height:0;overflow:hidden;transition:max-height .5s cubic-bezier(.22,.8,.3,1)}
+.faq-a p{padding:0 24px 22px;color:var(--muted);font-size:.94rem}
+.faq-side{background:linear-gradient(160deg,rgba(124,92,255,.16),rgba(34,211,238,.09));border:1px solid rgba(124,92,255,.3);border-radius:var(--radius);padding:34px 28px;position:sticky;top:110px}
+.faq-side h3{font-family:var(--font-head);font-size:1.2rem;margin-bottom:12px}
+.faq-side p{color:var(--muted);font-size:.92rem;margin-bottom:22px}
+
+/* ═════════════════════ CONTACT ═════════════════════ */
+.contact-panel{
+  background:linear-gradient(160deg,rgba(124,92,255,.14),rgba(34,211,238,.07));
+  border:1px solid rgba(124,92,255,.3);border-radius:26px;
+  padding:clamp(44px,7vw,80px) clamp(28px,6vw,72px);text-align:center;position:relative;overflow:hidden;
+}
+.contact-panel::before{content:'';position:absolute;top:-70px;right:-70px;width:260px;height:260px;border-radius:50%;background:radial-gradient(circle,rgba(34,211,238,.22),transparent 70%);filter:blur(30px)}
+.contact-panel h2{font-family:var(--font-head);font-size:clamp(1.9rem,4vw,2.9rem);font-weight:800;margin-bottom:16px}
+.contact-panel p{color:var(--muted);max-width:56ch;margin:0 auto 32px}
+.contact-ctas{display:flex;gap:16px;justify-content:center;flex-wrap:wrap}
+
+/* ═════════════════════ FOOTER ═════════════════════ */
+footer{border-top:1px solid var(--border);padding:56px 6% 34px;background:rgba(255,255,255,.015)}
+.foot-grid{display:grid;grid-template-columns:2fr 1fr 1.4fr;gap:40px;max-width:1240px;margin:0 auto 40px}
+.foot-brand p{color:var(--muted);font-size:.9rem;margin-top:14px;max-width:34ch}
+.foot-col h4{font-family:var(--font-head);font-size:.95rem;margin-bottom:16px;color:var(--txt)}
+.foot-col ul li{margin-bottom:10px}
+.foot-col a{color:var(--muted);font-size:.9rem;transition:color .3s}
+.foot-col a:hover{color:var(--cyan)}
+.stripe-note{display:inline-flex;align-items:center;gap:12px;padding:14px 20px;border-radius:12px;background:rgba(255,255,255,.04);border:1px solid var(--border);color:var(--muted);font-size:.85rem}
+.stripe-note svg{width:20px;height:20px;flex:none}
+.stripe-note b{color:var(--txt)}
+.foot-bottom{display:flex;justify-content:space-between;gap:14px;flex-wrap:wrap;color:var(--muted);font-size:.82rem;max-width:1240px;margin:0 auto;padding-top:26px;border-top:1px solid var(--border)}
+
+/* ═════════════════════ TOAST + RETOUR HAUT ═════════════════════ */
+#toast{
+  position:fixed;bottom:26px;left:50%;transform:translate(-50%,90px);opacity:0;
+  background:rgba(14,14,34,.95);border:1px solid rgba(124,92,255,.5);color:var(--txt);
+  padding:15px 24px;border-radius:14px;font-size:.9rem;max-width:min(92vw,560px);text-align:center;
+  box-shadow:0 18px 50px -12px rgba(0,0,0,.7);backdrop-filter:blur(12px);
+  transition:transform .5s cubic-bezier(.22,1.4,.4,1),opacity .5s;z-index:1300;pointer-events:none;
+}
+#toast.show{transform:translate(-50%,0);opacity:1}
+#toast .t-strong{color:#ffd166;font-weight:600}
+#topBtn{
+  position:fixed;right:26px;bottom:26px;width:50px;height:50px;border-radius:50%;
+  background:linear-gradient(135deg,var(--violet),var(--cyan));border:0;cursor:pointer;
+  display:flex;align-items:center;justify-content:center;color:#fff;
+  box-shadow:0 12px 30px -8px rgba(124,92,255,.65);
+  opacity:0;pointer-events:none;transform:translateY(16px);
+  transition:opacity .4s,transform .4s;z-index:800;
+}
+#topBtn.show{opacity:1;pointer-events:auto;transform:none}
+#topBtn:hover{transform:translateY(-4px)}
+#topBtn svg{width:20px;height:20px;stroke:#fff;stroke-width:2.4;fill:none;stroke-linecap:round;stroke-linejoin:round}
+
+/* ═══════════ DISCORD ═══════════ */
+.nav-links a[data-discord] svg{width:15px;height:15px;fill:#5865F2;vertical-align:-2px;margin-right:5px}
+a.trust-pill{cursor:pointer;transition:background .3s,border-color .3s,transform .3s}
+a.trust-pill:hover{background:rgba(88,101,242,.14);border-color:rgba(88,101,242,.5);transform:translateY(-2px)}
+.icon-discord{background:linear-gradient(135deg,#5865F2,#8b5cf6)!important;box-shadow:0 10px 26px -8px rgba(88,101,242,.6),inset 0 1px 0 rgba(255,255,255,.35)!important}
+.icon-discord svg{fill:#fff;stroke:none}
+
+/* ═════════════════════ REVEAL ═════════════════════ */
+.reveal{opacity:0;transform:translateY(30px);transition:opacity .75s ease,transform .75s cubic-bezier(.22,.8,.3,1);transition-delay:var(--d,0s)}
+.reveal.in{opacity:1;transform:none}
+
+/* ═════════════════════ RESPONSIVE ═════════════════════ */
+@media(max-width:960px){
+  .faq-wrap{grid-template-columns:1fr}
+  .faq-side{position:static}
+  .foot-grid{grid-template-columns:1fr 1fr}
+}
+@media(max-width:860px){
+  .nav-links{
+    position:fixed;inset:0;flex-direction:column;justify-content:center;gap:34px;
+    background:rgba(5,5,15,.97);backdrop-filter:blur(20px);
+    transform:translateY(-100%);transition:transform .5s cubic-bezier(.22,.8,.3,1);z-index:1050;
+  }
+  .nav-links.open{transform:translateY(0)}
+  .nav-links a{font-size:1.4rem;font-family:var(--font-head)}
+  .nav-links .btn-head{font-size:1.1rem;padding:14px 34px}
+  .hamburger{display:flex}
+  header{padding:18px 5%}
+  header.scrolled{padding:12px 5%}
+}
+@media(max-width:640px){
+  .section{padding:80px 5%}
+  .hero{padding:120px 5% 70px}
+  .hero-ctas{flex-direction:column;align-items:stretch}
+  .foot-grid{grid-template-columns:1fr;gap:28px}
+  .foot-bottom{justify-content:center;text-align:center}
+  #topBtn{right:18px;bottom:18px}
+}
+/* ═══════════ ACCESSIBILITÉ : MOUVEMENT RÉDUIT ═══════════ */
+@media(prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation:none!important;transition:none!important}
+  html{scroll-behavior:auto}
+  .reveal{opacity:1;transform:none}
+}
+</style>
+<noscript><style>.reveal{opacity:1;transform:none}.type-line .caret{display:none}</style></noscript>
+</head>
+<body>
+
+<div id="progress"></div>
+
+<!-- Fond animé -->
+<div class="aurora" aria-hidden="true">
+  <div class="blob blob-1"></div>
+  <div class="blob blob-2"></div>
+  <div class="blob blob-3"></div>
+</div>
+<div class="grid-overlay" aria-hidden="true"></div>
+
+<!-- ═══════════════ HEADER ═══════════════ -->
+<header id="header">
+  <a href="#" class="logo" aria-label="NovaIA — retour en haut">
+    <svg class="mark" viewBox="0 0 100 100" aria-hidden="true">
+      <defs><linearGradient id="lg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#7c5cff"/><stop offset="1" stop-color="#22d3ee"/></linearGradient></defs>
+      <rect width="100" height="100" rx="26" fill="#0a0a22"/>
+      <path d="M54 12 26 56h20l-8 32 34-44H50z" fill="url(#lg)"/>
+    </svg>
+    Nova<span class="accent">IA</span>
+  </a>
+  <nav class="nav-links" id="navLinks" aria-label="Navigation principale">
+    <a href="#services">Boutique</a>
+    <a href="#process">Comment ça marche</a>
+    <a href="#faq">FAQ</a>
+    <a data-discord href="#"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20.3 4.4A17 17 0 0 0 16 3l-.3.6a12 12 0 0 1 3.5 1.7 16 16 0 0 0-14.4 0A12 12 0 0 1 8.3 3.6L8 3a17 17 0 0 0-4.3 1.4C1.7 8.7 1 12.6 1.4 16.4a17 17 0 0 0 5.2 2.6l.6-1a11 11 0 0 1-1.7-.8l.4-.3a12 12 0 0 0 10.2 0l.4.3c-.5.3-1.1.6-1.7.8l.6 1a17 17 0 0 0 5.2-2.6c.5-4.4-.7-8.3-3.3-12ZM8.6 14.2c-1 0-1.8-.9-1.8-2s.8-2 1.8-2 1.8.9 1.8 2-.8 2-1.8 2Zm6.8 0c-1 0-1.8-.9-1.8-2s.8-2 1.8-2 1.8.9 1.8 2-.8 2-1.8 2Z"/></svg>Discord</a>
+    <a href="contact.html">Contact</a>
+    <a href="#services" class="btn btn-primary btn-head">Voir les services</a>
+  </nav>
+  <button class="hamburger" id="hamburger" aria-label="Ouvrir le menu" aria-expanded="false" aria-controls="navLinks">
+    <span></span><span></span><span></span>
+  </button>
+</header>
+
+<main>
+<!-- ═══════════════ HERO ═══════════════ -->
+<section class="hero">
+  <div class="badge reveal"><span class="dot"></span> Boutique de services Web &amp; IA</div>
+  <h1 class="reveal" style="--d:.1s">Votre projet digital,<br><span class="grad">propulsé par l’IA.</span></h1>
+  <p class="type-line reveal" style="--d:.2s">Nous créons&nbsp;<span class="typed" id="typed">des solutions sur mesure</span><span class="caret" aria-hidden="true"></span></p>
+  <p class="sub reveal" style="--d:.3s">Sites web modernes, formations informatique &amp; IA, programmation 3D assistée par IA, code prêt à l’emploi et services Discord : tout est réalisable, et tout se commande ici en quelques secondes.</p>
+  <div class="hero-ctas reveal" style="--d:.4s">
+    <a href="#services" class="btn btn-primary">Découvrir la boutique<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+    <a href="contact.html" class="btn btn-ghost">Parler de mon projet</a>
+  </div>
+  <div class="trust-row reveal" style="--d:.5s">
+    <span class="trust-pill"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2 4 5.5v5C4 16 7.5 20 12 22c4.5-2 8-6 8-11.5v-5L12 2Z" stroke-width="1.6" fill="none" stroke-linejoin="round"/></svg>Paiement 100&nbsp;% Stripe</span>
+    <span class="trust-pill"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="10" width="16" height="10" rx="2" stroke-width="1.6" fill="none"/><path d="M8 10V7a4 4 0 0 1 8 0v3" stroke-width="1.6" fill="none"/></svg>CB · Apple&nbsp;Pay · Google&nbsp;Pay</span>
+    <span class="trust-pill"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M13 2 4 14h6l-1 8 9-12h-6l1-8Z" stroke-width="1.6" fill="none" stroke-linejoin="round"/></svg>Livraison rapide</span>
+    <a class="trust-pill" data-discord href="#"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="#5865F2" d="M20.3 4.4A17 17 0 0 0 16 3l-.3.6a12 12 0 0 1 3.5 1.7 16 16 0 0 0-14.4 0A12 12 0 0 1 8.3 3.6L8 3a17 17 0 0 0-4.3 1.4C1.7 8.7 1 12.6 1.4 16.4a17 17 0 0 0 5.2 2.6l.6-1a11 11 0 0 1-1.7-.8l.4-.3a12 12 0 0 0 10.2 0l.4.3c-.5.3-1.1.6-1.7.8l.6 1a17 17 0 0 0 5.2-2.6c.5-4.4-.7-8.3-3.3-12ZM8.6 14.2c-1 0-1.8-.9-1.8-2s.8-2 1.8-2 1.8.9 1.8 2-.8 2-1.8 2Zm6.8 0c-1 0-1.8-.9-1.8-2s.8-2 1.8-2 1.8.9 1.8 2-.8 2-1.8 2Z"/></svg>Rejoindre le Discord</a>
+  </div>
+  <div class="stats reveal" style="--d:.6s">
+    <div class="stat"><div class="n" data-count="7">0</div><div class="l">univers de services</div></div>
+    <div class="stat"><div class="n" data-count="100" data-suffix="%">0</div><div class="l">paiement via Stripe</div></div>
+    <div class="stat"><div class="n" data-count="24" data-suffix="h">0</div><div class="l">réponse garantie</div></div>
+  </div>
+</section>
+
+<!-- ═══════════════ MARQUEE ═══════════════ -->
+<div class="marquee-band" aria-hidden="true">
+  <div class="marquee">
+    <span>React<i> ✦</i></span><span>Python<i> ✦</i></span><span>Blender<i> ✦</i></span><span>Three.js<i> ✦</i></span><span>Claude<i> ✦</i></span><span>ChatGPT<i> ✦</i></span><span>Midjourney<i> ✦</i></span><span>Tailwind CSS<i> ✦</i></span><span>Node.js<i> ✦</i></span><span>Discord.js<i> ✦</i></span><span>Stable Diffusion<i> ✦</i></span>
+    <span>React<i> ✦</i></span><span>Python<i> ✦</i></span><span>Blender<i> ✦</i></span><span>Three.js<i> ✦</i></span><span>Claude<i> ✦</i></span><span>ChatGPT<i> ✦</i></span><span>Midjourney<i> ✦</i></span><span>Tailwind CSS<i> ✦</i></span><span>Node.js<i> ✦</i></span><span>Discord.js<i> ✦</i></span><span>Stable Diffusion<i> ✦</i></span>
+  </div>
+</div>
+
+<!-- ═══════════════ SERVICES ═══════════════ -->
+<section class="section" id="services">
+  <div class="section-head reveal">
+    <span class="kicker">La boutique</span>
+    <h2>Sept services, un seul objectif&nbsp;:<br>vous faire gagner du temps</h2>
+    <p>Choisissez votre service, cliquez sur «&nbsp;Commander&nbsp;», payez en toute sécurité via Stripe — c’est tout. Aucun compte à créer, aucune friction.</p>
+  </div>
+
+  <div class="cards">
+    <!-- ✏️ SERVICE 1 : Page de site web — modifiez prix/description ici -->
+    <article class="card reveal">
+      <div class="icon"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a15 15 0 0 1 0 18M12 3a15 15 0 0 0 0 18"/></svg></div>
+      <h3>Page de site web</h3>
+      <p class="desc">Site vitrine, landing page ou portfolio : une page moderne, rapide et responsive, conçue pour convertir vos visiteurs en clients.</p>
+      <ul class="feat">
+        <li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12.5 9.5 18 20 6"/></svg>Design sur mesure, 100&nbsp;% responsive</li>
+        <li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12.5 9.5 18 20 6"/></svg>SEO de base &amp; performance optimisée</li>
+        <li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12.5 9.5 18 20 6"/></svg>Livraison en moins de 7 jours</li>
+        <li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12.5 9.5 18 20 6"/></svg>1 révision incluse</li>
+      </ul>
+      <div class="price"><span class="from">à partir de</span><span class="val">4.99&nbsp;€</span><span class="ttc">TTC</span></div>
+      <a class="btn btn-primary btn-commander" data-service="web" href="#">Commander maintenant</a>
+    </article>
+
+    <!-- ✏️ SERVICE 2 : Formation informatique & IA -->
+    <article class="card reveal" style="--d:.1s">
+      <div class="icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M2 8 12 3l10 5-10 5L2 8Z"/><path d="M6 10.5V16c0 1.5 2.7 3 6 3s6-1.5 6-3v-5.5"/><path d="M22 8v6"/></svg></div>
+      <h3>Formation informatique &amp; IA</h3>
+      <p class="desc">MasterClass pratiques pour maîtriser l’informatique et les outils IA (Claude, ChatGPT, Midjourney) — adaptées à votre niveau, du débutant au confirmé.</p>
+      <ul class="feat">
+        <li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12.5 9.5 18 20 6"/></svg>Sessions en visio, en français</li>
+        <li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12.5 9.5 18 20 6"/></svg>Exercices pratiques guidés</li>
+        <li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12.5 9.5 18 20 6"/></svg>Supports &amp; prompts fournis</li>
+        <li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12.5 9.5 18 20 6"/></svg>Tous niveaux acceptés</li>
+      </ul>
+      <div class="price"><span class="from">à partir de</span><span class="val">49.99&nbsp;€</span><span class="ttc">TTC</span></div>
+      <a class="btn btn-primary btn-commander" data-service="formation" href="#">Commander maintenant</a>
+    </article>
+
+    <!-- ✏️ SERVICE 3 : Programmation 3D avec IA -->
+    <article class="card reveal" style="--d:.2s">
+      <div class="icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2 21 7v10l-9 5-9-5V7l9-5Z"/><path d="M12 22V12M12 12 3 7M12 12l9-5"/></svg></div>
+      <h3>Programmation 3D avec IA</h3>
+      <p class="desc">Scènes 3D, rendus photoréalistes et modèles générés puis affinés par IA (Blender + outils IA) : du visuel spectaculaire, sans les délais traditionnels.</p>
+      <ul class="feat">
+        <li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12.5 9.5 18 20 6"/></svg>Rendus photoréalistes</li>
+        <li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12.5 9.5 18 20 6"/></svg>Textures &amp; matériaux générés par IA</li>
+        <li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12.5 9.5 18 20 6"/></svg>Fichiers sources livrés</li>
+        <li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12.5 9.5 18 20 6"/></svg>Animation sur demande</li>
+      </ul>
+      <div class="price"><span class="from">à partir de</span><span class="val">39.99&nbsp;€</span><span class="ttc">TTC</span></div>
+      <a class="btn btn-primary btn-commander" data-service="trois_d" href="#">Commander maintenant</a>
+    </article>
+
+    <!-- ✏️ SERVICE 4 : Code IA prêt à l'emploi -->
+    <article class="card reveal" style="--d:.3s">
+      <div class="icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m8 6-6 6 6 6M16 6l6 6-6 6"/></svg></div>
+      <h3>Code IA prêt à l’emploi</h3>
+      <p class="desc">Scripts, chatbots, agents et automatisations conçus par IA, déjà testés et documentés : intégrez-les chez vous en quelques minutes.</p>
+      <ul class="feat">
+        <li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12.5 9.5 18 20 6"/></svg>Code commenté &amp; documenté</li>
+        <li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12.5 9.5 18 20 6"/></svg>Guide d’installation inclus</li>
+        <li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12.5 9.5 18 20 6"/></svg>Licence d’utilisation commerciale</li>
+        <li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12.5 9.5 18 20 6"/></svg>Mises à jour incluses</li>
+      </ul>
+      <div class="price"><span class="from">à partir de</span><span class="val">49.99&nbsp;€</span><span class="ttc">TTC</span></div>
+      <a class="btn btn-primary btn-commander" data-service="code" href="#">Commander maintenant</a>
+    </article>
+
+    <!-- ✏️ SERVICE 5 : Création de serveur Discord -->
+    <article class="card reveal" style="--d:.4s">
+      <div class="icon icon-discord"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20.3 4.4A17 17 0 0 0 16 3l-.3.6a12 12 0 0 1 3.5 1.7 16 16 0 0 0-14.4 0A12 12 0 0 1 8.3 3.6L8 3a17 17 0 0 0-4.3 1.4C1.7 8.7 1 12.6 1.4 16.4a17 17 0 0 0 5.2 2.6l.6-1a11 11 0 0 1-1.7-.8l.4-.3a12 12 0 0 0 10.2 0l.4.3c-.5.3-1.1.6-1.7.8l.6 1a17 17 0 0 0 5.2-2.6c.5-4.4-.7-8.3-3.3-12ZM8.6 14.2c-1 0-1.8-.9-1.8-2s.8-2 1.8-2 1.8.9 1.8 2-.8 2-1.8 2Zm6.8 0c-1 0-1.8-.9-1.8-2s.8-2 1.8-2 1.8.9 1.8 2-.8 2-1.8 2Z"/></svg></div>
+      <h3>Création de serveur Discord</h3>
+      <p class="desc">Serveur Discord complet et professionnel : structure, salons, rôles, permissions et ambiance visuelle soignée, prêt à accueillir votre communauté.</p>
+      <ul class="feat">
+        <li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12.5 9.5 18 20 6"/></svg>Salons, rôles &amp; permissions configurés</li>
+        <li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12.5 9.5 18 20 6"/></svg>Emojis &amp; identité visuelle</li>
+        <li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12.5 9.5 18 20 6"/></svg>Bots de modération installés</li>
+        <li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12.5 9.5 18 20 6"/></svg>Guide de gestion inclus</li>
+      </ul>
+      <div class="price"><span class="from">à partir de</span><span class="val">4.99&nbsp;€</span><span class="ttc">TTC</span></div>
+      <a class="btn btn-primary btn-commander" data-service="discord_serveur" href="#">Commander maintenant</a>
+    </article>
+
+    <!-- ✏️ SERVICE 6 : Bot Discord sur mesure -->
+    <article class="card reveal" style="--d:.5s">
+      <div class="icon icon-discord"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 3a2 2 0 0 0-2 2v1h2v2H7a6 6 0 0 0 4 5.7V18H9a2 2 0 0 0-2 2v1h10v-1a2 2 0 0 0-2-2h-2v-4.3A6 6 0 0 0 17 8h-2V6h2V5a2 2 0 0 0-2-2H9Z"/><path d="M5 6h2M5 8h2"/></svg></div>
+      <h3>Bot Discord sur mesure</h3>
+      <p class="desc">Bot Discord développé pour vos besoins : commandes custom, tickets, niveaux, annonces, musique ou modération automatique — hébergement guidé inclus.</p>
+      <ul class="feat">
+        <li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12.5 9.5 18 20 6"/></svg>Commandes &amp; slash commands custom</li>
+        <li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12.5 9.5 18 20 6"/></svg>Modération &amp; tickets automatiques</li>
+        <li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12.5 9.5 18 20 6"/></svg>Code source livré + commentaires</li>
+        <li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12.5 9.5 18 20 6"/></svg>Mise en ligne accompagnée</li>
+      </ul>
+      <div class="price"><span class="from">à partir de</span><span class="val">14.99&nbsp;€</span><span class="ttc">TTC</span></div>
+      <a class="btn btn-primary btn-commander" data-service="discord_bot" href="#">Commander maintenant</a>
+    </article>
+
+    <!-- ✏️ SERVICE 7 : Pack serveur + bot Discord -->
+    <article class="card reveal" style="--d:.6s">
+      <div class="icon icon-discord"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2 4 5.5v5C4 16 7.5 20 12 22c4.5-2 8-6 8-11.5v-5L12 2Z"/><path d="m9 12 2 2 4-4"/></svg></div>
+      <h3>Pack serveur + bot Discord</h3>
+      <p class="desc">L’offre complète : serveur pro + bot sur mesure + système d’IA intégré (chatbot, support auto) — votre communauté Discord clé en main, économisez 20&nbsp;%.</p>
+      <ul class="feat">
+        <li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12.5 9.5 18 20 6"/></svg>Serveur + bot + chatbot IA</li>
+        <li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12.5 9.5 18 20 6"/></svg>Tout le pack « Création serveur »</li>
+        <li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12.5 9.5 18 20 6"/></svg>1 mois de suivi prioritaire</li>
+        <li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12.5 9.5 18 20 6"/></svg>Économie de 20&nbsp;% vs séparé</li>
+      </ul>
+      <div class="price"><span class="from">à partir de</span><span class="val">19.99&nbsp;€</span><span class="ttc">TTC</span></div>
+      <a class="btn btn-primary btn-commander" data-service="discord_pack" href="#">Commander maintenant</a>
+    </article>
+  </div>
+
+  <p class="cards-note reveal">Prix indicatifs «&nbsp;à partir de&nbsp;», TTC. Pour un besoin spécifique, <a href="contact.html">demandez un devis gratuit</a> — réponse sous 24&nbsp;h. Le support et la communauté passent aussi par notre <a data-discord href="#">serveur Discord</a>.</p>
+</section>
+
+<!-- ═══════════════ PROCESS ═══════════════ -->
+<section class="section" id="process">
+  <div class="section-head reveal">
+    <span class="kicker">Comment ça marche</span>
+    <h2>Commander prend moins d’une minute</h2>
+    <p>Le paiement est intégralement géré par Stripe : vos données bancaires ne passent jamais par notre site.</p>
+  </div>
+  <div class="steps">
+    <div class="step reveal">
+      <div class="num">1</div>
+      <h3>Choisissez votre service</h3>
+      <p>Parcourez la boutique et sélectionnez l’offre qui correspond à votre besoin : site web, formation, 3D, code IA ou services Discord.</p>
+    </div>
+    <div class="step reveal" style="--d:.12s">
+      <div class="num">2</div>
+      <h3>Payez via Stripe</h3>
+      <p>Vous arrivez directement sur la page de paiement sécurisée de Stripe. Reçu envoyé par email immédiatement.</p>
+    </div>
+    <div class="step reveal" style="--d:.24s">
+      <div class="num">3</div>
+      <h3>Recevez votre livrable</h3>
+      <p>Nous récupérons votre email via Stripe et vous contactons sous 24&nbsp;h pour lancer la réalisation.</p>
+    </div>
+  </div>
+  <div class="pay-badges reveal">
+    <span>VISA</span><span>MASTERCARD</span><span>CB</span><span>APPLE PAY</span><span>GOOGLE PAY</span>
+  </div>
+</section>
+
+<!-- ═══════════════ FAQ ═══════════════ -->
+<section class="section" id="faq">
+  <div class="section-head reveal">
+    <span class="kicker">FAQ</span>
+    <h2>Les questions qu’on nous pose</h2>
+  </div>
+  <div class="faq-wrap">
+    <div class="faq-list">
+      <div class="faq-item reveal">
+        <button class="faq-q" aria-expanded="false">Le paiement est-il sécurisé&nbsp;?<svg class="chev" viewBox="0 0 24 24" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></button>
+        <div class="faq-a"><p>Oui, à 100&nbsp;%. Le paiement est exclusivement assuré par Stripe, leader mondial du paiement en ligne (certifié PCI&nbsp;DSS niveau&nbsp;1). Vous saisissez vos informations bancaires uniquement sur la page officielle de Stripe : rien ne transite par notre site.</p></div>
+      </div>
+      <div class="faq-item reveal" style="--d:.06s">
+        <button class="faq-q" aria-expanded="false">Que se passe-t-il après mon paiement&nbsp;?<svg class="chev" viewBox="0 0 24 24" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></button>
+        <div class="faq-a"><p>Stripe vous envoie immédiatement un reçu par email et nous transmet votre adresse. Nous vous contactons alors sous 24&nbsp;h ouvrées pour préciser votre besoin (brief, planning, format de livraison) et lancer la réalisation.</p></div>
+      </div>
+      <div class="faq-item reveal" style="--d:.12s">
+        <button class="faq-q" aria-expanded="false">Quels moyens de paiement sont acceptés&nbsp;?<svg class="chev" viewBox="0 0 24 24" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></button>
+        <div class="faq-a"><p>Carte bancaire (Visa, Mastercard, CB), Apple&nbsp;Pay et Google&nbsp;Pay selon votre appareil, ainsi que les moyens de paiement activés sur notre compte Stripe. Aucune autre méthode de paiement n’est acceptée : tout passe par Stripe, pour votre sécurité.</p></div>
+      </div>
+      <div class="faq-item reveal" style="--d:.18s">
+        <button class="faq-q" aria-expanded="false">Puis-je personnaliser mon projet&nbsp;?<svg class="chev" viewBox="0 0 24 24" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></button>
+        <div class="faq-a"><p>Bien sûr. Les prix affichés sont des points d’entrée «&nbsp;à partir de&nbsp;». Pour un projet plus ambitiant (multi-pages, fonctionnalités spécifiques, pack formations, serveur Discord sur mesure), demandez un devis gratuit via la page contact — réponse sous 24&nbsp;h.</p></div>
+      </div>
+      <div class="faq-item reveal" style="--d:.24s">
+        <button class="faq-q" aria-expanded="false">Comment se déroulent les formations&nbsp;?<svg class="chev" viewBox="0 0 24 24" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></button>
+        <div class="faq-a"><p>En visioconférence, en français, en séance individuelle ou en petit groupe. Chaque session alterne théorie courte et pratique intensive : vous repartez avec des supports, des modèles de prompts prêts à l’emploi et un accès suivi pour vos questions.</p></div>
+      </div>
+      <div class="faq-item reveal" style="--d:.3s">
+        <button class="faq-q" aria-expanded="false">Que contient exactement le code IA livré&nbsp;?<svg class="chev" viewBox="0 0 24 24" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></button>
+        <div class="faq-a"><p>Un dossier complet : code source entièrement commenté, guide d’installation pas à pas, dépendances listées et licence d’utilisation commerciale. Le tout testé avant livraison, avec les mises à jour incluses.</p></div>
+      </div>
+    </div>
+    <aside class="faq-side reveal" style="--d:.15s">
+      <h3>Une autre question&nbsp;?</h3>
+      <p>Écrivez-nous directement : nous répondons à toutes les demandes sous 24&nbsp;h ouvrées, devis gratuit et sans engagement.</p>
+      <a href="contact.html" class="btn btn-ghost">Contacter l’équipe</a>
+    </aside>
+  </div>
+</section>
+
+<!-- ═══════════════ CONTACT (renvoi vers la page dédiée contact.html) ═══════════════ -->
+<section class="section" id="contact">
+  <div class="contact-panel reveal">
+    <span class="kicker">Contact</span>
+    <h2>Un projet spécifique en tête&nbsp;?</h2>
+    <p>Décrivez-nous votre besoin : site complet, formation sur mesure, scène 3D ambitieuse, bot Discord ou automatisation IA complexe. Notre page contact centralise tout : email à copier-coller en un clic et serveur Discord pour discuter en direct.</p>
+    <div class="contact-ctas">
+      <a class="btn btn-primary" href="contact.html">✉&nbsp; Aller à la page contact</a>
+      <a class="btn btn-ghost" data-discord href="#">💬&nbsp; Rejoindre le Discord</a>
+    </div>
+  </div>
+</section>
+</main>
+
+<!-- ═══════════════ FOOTER ═══════════════ -->
+<footer>
+  <div class="foot-grid">
+    <div class="foot-brand">
+      <a href="#" class="logo">
+        <svg class="mark" viewBox="0 0 100 100" aria-hidden="true">
+          <rect width="100" height="100" rx="26" fill="#0a0a22"/>
+          <path d="M54 12 26 56h20l-8 32 34-44H50z" fill="url(#lg)"/>
+        </svg>
+        Nova<span class="accent">IA</span>
+      </a>
+      <p>Studio de services web &amp; intelligence artificielle. Sites, formations, 3D, code IA et services Discord — pensés et réalisés par une équipe d’humains et d’assistants IA.</p>
+    </div>
+    <div class="foot-col">
+      <h4>Navigation</h4>
+      <ul>
+        <li><a href="#services">Boutique</a></li>
+        <li><a href="#process">Comment ça marche</a></li>
+        <li><a href="#faq">FAQ</a></li>
+        <li><a data-discord href="#">Discord</a></li>
+        <li><a href="contact.html">Contact</a></li>
+      </ul>
+    </div>
+    <div class="foot-col">
+      <h4>Paiement</h4>
+      <div class="stripe-note">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 4h16v16H4z" fill="none" stroke="#9aa0c8" stroke-width="1.4"/><text x="12" y="15" text-anchor="middle" font-size="9" fill="#eef0ff" font-family="Sora, Arial, sans-serif" font-weight="700">S</text></svg>
+        <span>Tous les paiements sont traités par <b>Stripe</b> — chiffrés et conformes PCI&nbsp;DSS. Aucune donnée bancaire ne nous est transmise.</span>
+      </div>
+    </div>
+  </div>
+  <div class="foot-bottom">
+    <span>© <span id="year">2026</span> NovaIA — Tous droits réservés.</span>
+    <span>Site co-conçu avec l’aide d’assistants IA 🤖</span>
+  </div>
+</footer>
+
+<button id="topBtn" aria-label="Retour en haut de la page">
+  <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 19V5M5 12l7-7 7 7"/></svg>
+</button>
+<div id="toast" role="status" aria-live="polite"></div>
+
+<script>
+/* La configuration (liens Stripe, email, invite Discord) est désormais
+   centralisée dans le fichier config.js, chargé dans le <head>. */
+
+(function(){
+"use strict";
+const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+const $  = (s, c) => (c || document).querySelector(s);
+const $$ = (s, c) => Array.from((c || document).querySelectorAll(s));
+
+/* ---------- Toast ---------- */
+const toast = $("#toast");
+let toastTimer = null;
+function showToast(html){
+  toast.innerHTML = html;
+  toast.classList.add("show");
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => toast.classList.remove("show"), 5200);
+}
+
+/* ---------- Boutons Stripe ---------- */
+$$("a[data-service]").forEach(a => {
+  const conf = STRIPE_CONFIG[a.dataset.service];
+  if (!conf) return;
+  const configured = !/VOTRE_LIEN/.test(conf.url);
+  if (configured){
+    a.href = conf.url;
+    a.target = "_blank";
+    a.rel = "noopener noreferrer";
+  } else {
+    a.addEventListener("click", e => {
+      e.preventDefault();
+      showToast("⚠️ <span class='t-strong'>Lien Stripe non configuré</span> pour «&nbsp;" + conf.label + "&nbsp;».<br>Ouvrez <b>config.js</b> et collez votre lien de paiement.");
+      console.warn("[NovaIA] Lien Stripe manquant pour : " + conf.label + " (clé '" + a.dataset.service + "')");
+    });
+  }
+});
+
+/* ---------- Liens email ---------- */
+$$("a[data-mail]").forEach(a => { a.href = "mailto:" + MAIL_CONTACT; });
+
+/* ---------- Liens Discord ---------- */
+$$("a[data-discord]").forEach(a => {
+  const invite = (typeof DISCORD_INVITE === "string") ? DISCORD_INVITE : "";
+  if (invite && !/VOTRE_INVITE/i.test(invite)){
+    a.href = invite;
+    a.target = "_blank";
+    a.rel = "noopener noreferrer";
+  } else {
+    a.addEventListener("click", e => {
+      e.preventDefault();
+      showToast("⚠️ <span class='t-strong'>Lien Discord non configuré</span>.<br>Ouvrez <b>config.js</b> et collez votre invitation (ex.&nbsp;: https://discord.gg/AbCdEf1234) dans <b>DISCORD_INVITE</b>.");
+    });
+  }
+});
+
+/* ---------- Année auto ---------- */
+$("#year").textContent = new Date().getFullYear();
+
+/* ---------- Header + barre de progression + bouton haut ---------- */
+const header = $("#header"), progress = $("#progress"), topBtn = $("#topBtn");
+let ticking = false;
+function onScroll(){
+  const y = window.scrollY;
+  header.classList.toggle("scrolled", y > 12);
+  const h = document.documentElement.scrollHeight - window.innerHeight;
+  progress.style.width = (h > 0 ? (y / h) * 100 : 0) + "%";
+  topBtn.classList.toggle("show", y > 420);
+  ticking = false;
+}
+window.addEventListener("scroll", () => {
+  if (!ticking){ ticking = true; requestAnimationFrame(onScroll); }
+}, { passive: true });
+onScroll();
+topBtn.addEventListener("click", () => window.scrollTo({ top: 0, behavior: reduceMotion ? "auto" : "smooth" }));
+
+/* ---------- Menu mobile ---------- */
+const burger = $("#hamburger"), navLinks = $("#navLinks");
+function closeMenu(){
+  navLinks.classList.remove("open");
+  burger.classList.remove("open");
+  burger.setAttribute("aria-expanded", "false");
+  burger.setAttribute("aria-label", "Ouvrir le menu");
+}
+burger.addEventListener("click", () => {
+  const open = navLinks.classList.toggle("open");
+  burger.classList.toggle("open", open);
+  burger.setAttribute("aria-expanded", String(open));
+  burger.setAttribute("aria-label", open ? "Fermer le menu" : "Ouvrir le menu");
+});
+$$("#navLinks a").forEach(a => a.addEventListener("click", closeMenu));
+document.addEventListener("keydown", e => { if (e.key === "Escape") closeMenu(); });
+
+/* ---------- Révélation au scroll ---------- */
+if ("IntersectionObserver" in window){
+  const io = new IntersectionObserver(entries => {
+    entries.forEach(en => {
+      if (en.isIntersecting){ en.target.classList.add("in"); io.unobserve(en.target); }
+    });
+  }, { threshold: 0.12, rootMargin: "0px 0px -40px 0px" });
+  $$(".reveal").forEach(el => io.observe(el));
+} else {
+  $$(".reveal").forEach(el => el.classList.add("in"));
+}
+
+/* ---------- Compteurs ---------- */
+function animateCount(el){
+  const target = parseInt(el.dataset.count, 10) || 0;
+  const suffix = el.dataset.suffix || "";
+  if (reduceMotion || target <= 0){ el.textContent = target + suffix; return; }
+  const dur = 1400, t0 = performance.now();
+  (function frame(t){
+    const p = Math.min((t - t0) / dur, 1);
+    const eased = 1 - Math.pow(1 - p, 3);
+    el.textContent = Math.round(eased * target) + suffix;
+    if (p < 1) requestAnimationFrame(frame);
+  })(t0);
+}
+if ("IntersectionObserver" in window){
+  const io2 = new IntersectionObserver(entries => {
+    entries.forEach(en => {
+      if (en.isIntersecting){ animateCount(en.target); io2.unobserve(en.target); }
+    });
+  }, { threshold: 0.4 });
+  $$("[data-count]").forEach(el => io2.observe(el));
+} else {
+  $$("[data-count]").forEach(animateCount);
+}
+
+/* ---------- Effet machine à écrire ---------- */
+const typedEl = $("#typed");
+if (!reduceMotion && typedEl){
+  const phrases = [
+    "des sites web qui convertissent",
+    "des formations IA 100 % pratiques",
+    "de la 3D propulsée par l’IA",
+    "du code IA prêt à l’emploi",
+  ];
+  let pi = 0, ci = 0, deleting = false;
+  (function tick(){
+    const p = phrases[pi];
+    typedEl.textContent = p.slice(0, ci);
+    if (!deleting){
+      if (ci < p.length){ ci++; setTimeout(tick, 52); }
+      else { deleting = true; setTimeout(tick, 2100); }
+    } else {
+      if (ci > 0){ ci--; setTimeout(tick, 26); }
+      else { deleting = false; pi = (pi + 1) % phrases.length; setTimeout(tick, 380); }
+    }
+  })();
+}
+
+/* ---------- Accordéon FAQ ---------- */
+const faqItems = $$(".faq-item");
+function closeAllFaq(){
+  faqItems.forEach(it => {
+    it.classList.remove("open");
+    const b = it.querySelector(".faq-q");
+    b.setAttribute("aria-expanded", "false");
+    it.querySelector(".faq-a").style.maxHeight = "";
+  });
+}
+faqItems.forEach(it => {
+  const btn = it.querySelector(".faq-q");
+  const ans = it.querySelector(".faq-a");
+  btn.addEventListener("click", () => {
+    const wasOpen = it.classList.contains("open");
+    closeAllFaq();
+    if (!wasOpen){
+      it.classList.add("open");
+      btn.setAttribute("aria-expanded", "true");
+      ans.style.maxHeight = ans.scrollHeight + "px";
+    }
+  });
+});
+})();
+</script>
+</body>
+</html>

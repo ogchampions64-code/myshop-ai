@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NovaIA — Contact</title>
+<meta name="description" content="Contactez NovaIA : email à copier-coller en un clic ou rejoignez notre serveur Discord. Réponse sous 24 h.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop offset='0' stop-color='%237c5cff'/%3E%3Cstop offset='1' stop-color='%2322d3ee'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='100' height='100' rx='24' fill='%2307071a'/%3E%3Cpath d='M54 12 26 56h20l-8 32 34-44H50z' fill='url(%23g)'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Sora:wght@600;700;800&display=swap" rel="stylesheet">
+<script src="config.js"></script>
+<style>
+:root{
+  --bg:#05050f; --card:rgba(255,255,255,.045); --card-hover:rgba(255,255,255,.075);
+  --border:rgba(255,255,255,.11); --txt:#eef0ff; --muted:#9aa0c8;
+  --violet:#7c5cff; --cyan:#22d3ee; --discord:#5865F2;
+  --grad:linear-gradient(90deg,#7c5cff,#22d3ee);
+  --grad-3:linear-gradient(90deg,#7c5cff,#f472b6,#22d3ee);
+  --radius:18px;
+  --font-head:'Sora',system-ui,sans-serif; --font-body:'Inter',system-ui,sans-serif;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{font-family:var(--font-body);background:var(--bg);color:var(--txt);line-height:1.65;overflow-x:hidden;-webkit-font-smoothing:antialiased}
+a{color:inherit;text-decoration:none}
+::selection{background:rgba(124,92,255,.4)}
+
+/* Fond aurora */
+.aurora{position:fixed;inset:0;z-index:-2;overflow:hidden;pointer-events:none}
+.blob{position:absolute;border-radius:50%;filter:blur(90px);opacity:.45;will-change:transform}
+.blob-1{width:40vw;height:40vw;left:-8vw;top:-6vw;background:radial-gradient(circle,#7c5cff,transparent 65%);animation:float1 22s ease-in-out infinite}
+.blob-2{width:34vw;height:34vw;right:-6vw;top:30vh;background:radial-gradient(circle,#22d3ee,transparent 65%);animation:float2 26s ease-in-out infinite}
+.blob-3{width:30vw;height:30vw;left:30vw;bottom:-12vw;background:radial-gradient(circle,#f472b6,transparent 65%);animation:float3 30s ease-in-out infinite}
+@keyframes float1{0%,100%{transform:translate(0,0) scale(1)}50%{transform:translate(9vw,7vh) scale(1.15)}}
+@keyframes float2{0%,100%{transform:translate(0,0) scale(1)}50%{transform:translate(-8vw,10vh) scale(.9)}}
+@keyframes float3{0%,100%{transform:translate(0,0) scale(1)}50%{transform:translate(6vw,-9vh) scale(1.1)}}
+.grid-overlay{position:fixed;inset:0;z-index:-1;pointer-events:none;
+  background-image:linear-gradient(rgba(255,255,255,.028) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.028) 1px,transparent 1px);
+  background-size:64px 64px;
+  mask-image:radial-gradient(ellipse at 50% 0%,#000 30%,transparent 75%);
+  -webkit-mask-image:radial-gradient(ellipse at 50% 0%,#000 30%,transparent 75%);
+}
+
+/* Header simple */
+header{position:fixed;top:0;left:0;right:0;z-index:1000;display:flex;align-items:center;justify-content:space-between;padding:18px 6%;background:rgba(7,7,26,.78);backdrop-filter:blur(16px);border-bottom:1px solid var(--border)}
+.logo{display:flex;align-items:center;gap:10px;font-family:var(--font-head);font-weight:800;font-size:1.3rem}
+.logo .mark{width:32px;height:32px}
+.logo .accent{background:var(--grad);background-size:200% 100%;animation:gradShift 6s linear infinite;-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+@keyframes gradShift{to{background-position:200% 0}}
+.back{display:inline-flex;align-items:center;gap:8px;font-size:.92rem;font-weight:500;color:var(--muted);padding:10px 18px;border-radius:12px;border:1px solid var(--border);background:rgba(255,255,255,.04);transition:all .3s}
+.back:hover{color:var(--txt);background:rgba(255,255,255,.09);transform:translateY(-2px)}
+.back svg{width:16px;height:16px;stroke:currentColor;stroke-width:2.2;fill:none;stroke-linecap:round;stroke-linejoin:round}
+
+/* Page */
+.page{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:130px 6% 80px}
+.kicker{display:inline-block;font-size:.8rem;font-weight:600;letter-spacing:.22em;text-transform:uppercase;color:var(--cyan);margin-bottom:14px}
+h1{font-family:var(--font-head);font-size:clamp(2.2rem,5vw,3.6rem);font-weight:800;line-height:1.15;margin-bottom:18px}
+h1 .grad{background:var(--grad-3);background-size:200% 100%;animation:gradShift 5s linear infinite;-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+.lead{color:var(--muted);max-width:52ch;margin:0 auto 52px}
+
+/* ── CARRÉ EMAIL — la pièce maîtresse ── */
+.mail-box{
+  position:relative;
+  width:min(560px,100%);
+  background:var(--card);
+  border:1px solid var(--border);
+  border-radius:22px;
+  padding:46px 34px 40px;
+  backdrop-filter:blur(10px);
+  transition:transform .45s cubic-bezier(.22,.8,.3,1),box-shadow .45s,border-color .45s;
+  animation:boxIn .8s cubic-bezier(.22,1.2,.4,1) both .15s;
+}
+@keyframes boxIn{from{opacity:0;transform:translateY(34px) scale(.96)}to{opacity:1;transform:none}}
+.mail-box:hover{transform:translateY(-6px);border-color:rgba(124,92,255,.5);box-shadow:0 30px 70px -25px rgba(124,92,255,.5)}
+.mail-box::before{content:'';position:absolute;inset:-2px;border-radius:24px;padding:2px;background:linear-gradient(130deg,rgba(124,92,255,.65),transparent 30%,transparent 70%,rgba(34,211,238,.65));-webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);-webkit-mask-composite:xor;mask-composite:exclude;opacity:0;transition:opacity .45s;pointer-events:none}
+.mail-box:hover::before{opacity:1}
+.mail-box::after{content:'';position:absolute;top:-60px;right:-60px;width:220px;height:220px;border-radius:50%;background:radial-gradient(circle,rgba(34,211,238,.18),transparent 70%);filter:blur(28px);pointer-events:none}
+.mail-ico{width:64px;height:64px;margin:0 auto 22px;border-radius:18px;background:linear-gradient(135deg,var(--violet),var(--cyan));display:flex;align-items:center;justify-content:center;box-shadow:0 12px 30px -8px rgba(124,92,255,.6),inset 0 1px 0 rgba(255,255,255,.35);animation:icoBob 3.6s ease-in-out infinite}
+@keyframes icoBob{0%,100%{transform:translateY(0)}50%{transform:translateY(-7px)}}
+.mail-ico svg{width:30px;height:30px;stroke:#fff;stroke-width:1.9;fill:none;stroke-linecap:round;stroke-linejoin:round}
+.mail-box .t1{font-family:var(--font-head);font-size:1.15rem;font-weight:700;margin-bottom:6px}
+.mail-box .t2{font-size:.85rem;color:var(--muted);margin-bottom:26px}
+.addr-row{
+  display:flex;align-items:center;justify-content:center;gap:12px;
+  background:rgba(7,7,26,.72);border:1px solid var(--border);border-radius:14px;
+  padding:16px 18px;transition:border-color .35s,background .35s;
+}
+.addr-row:hover{border-color:rgba(34,211,238,.5)}
+.addr{font-family:var(--font-head);font-weight:600;font-size:clamp(1rem,3.4vw,1.3rem);letter-spacing:.02em;color:#fff;word-break:break-all}
+.btn-copy{
+  flex:none;display:inline-flex;align-items:center;gap:8px;cursor:pointer;
+  background:linear-gradient(90deg,#7c5cff,#5b8bff,#22d3ee);background-size:200% 100%;
+  color:#fff;border:0;border-radius:11px;padding:11px 18px;
+  font-family:var(--font-head);font-weight:600;font-size:.88rem;
+  transition:background-position .4s,transform .25s,box-shadow .35s;
+  box-shadow:0 8px 22px -8px rgba(124,92,255,.6);
+}
+.btn-copy:hover{background-position:100% 0;transform:translateY(-2px)}
+.btn-copy:active{transform:scale(.96)}
+.btn-copy svg{width:15px;height:15px;stroke:#fff;stroke-width:2;fill:none;stroke-linecap:round;stroke-linejoin:round;transition:transform .3s}
+.btn-copy.copied{background:linear-gradient(90deg,#10b981,#34d399)}
+.btn-copy.copied .ic{display:none}
+.btn-copy .ck{display:none}
+.btn-copy.copied .ck{display:inline}
+.btn-copy span.lbl{transition:opacity .2s}
+.mail-box .hint{font-size:.8rem;color:var(--muted);margin-top:16px}
+.mail-box .hint b{color:#c9c2ff}
+
+/* Discord */
+.discord-card{
+  width:min(560px,100%);
+  margin-top:26px;
+  background:linear-gradient(160deg,rgba(88,101,242,.16),rgba(88,101,242,.05));
+  border:1px solid rgba(88,101,242,.38);
+  border-radius:22px;padding:32px 30px;
+  display:flex;align-items:center;gap:22px;text-align:left;
+  transition:transform .45s cubic-bezier(.22,.8,.3,1),border-color .45s,box-shadow .45s;
+  animation:boxIn .8s cubic-bezier(.22,1.2,.4,1) both .3s;
+}
+.discord-card:hover{transform:translateY(-6px);border-color:rgba(88,101,242,.7);box-shadow:0 26px 60px -25px rgba(88,101,242,.55)}
+.dc-ico{width:56px;height:56px;flex:none;border-radius:16px;background:var(--discord);display:flex;align-items:center;justify-content:center;box-shadow:0 10px 26px -8px rgba(88,101,242,.7);transition:transform .5s cubic-bezier(.34,1.6,.5,1)}
+.discord-card:hover .dc-ico{transform:rotate(-8deg) scale(1.08)}
+.dc-ico svg{width:28px;height:28px;fill:#fff}
+.dc-txt{flex:1}
+.dc-txt h3{font-family:var(--font-head);font-size:1.1rem;font-weight:700;margin-bottom:5px}
+.dc-txt p{font-size:.88rem;color:var(--muted)}
+.btn-dc{
+  flex:none;display:inline-flex;align-items:center;gap:9px;cursor:pointer;
+  background:var(--discord);color:#fff;border:0;border-radius:12px;padding:12px 20px;
+  font-family:var(--font-head);font-weight:600;font-size:.92rem;
+  transition:transform .25s,box-shadow .35s,background .3s;
+  box-shadow:0 8px 22px -8px rgba(88,101,242,.7);
+}
+.btn-dc:hover{background:#4752c4;transform:translateY(-2px);box-shadow:0 14px 32px -8px rgba(88,101,242,.85)}
+.btn-dc:active{transform:scale(.96)}
+.btn-dc svg{width:17px;height:17px;fill:#fff}
+
+/* Stat + retour boutique */
+.stat-line{display:flex;align-items:center;gap:10px;margin-top:34px;font-size:.85rem;color:var(--muted)}
+.stat-line .dot{width:8px;height:8px;border-radius:50%;background:#22d3ee;box-shadow:0 0 0 0 rgba(34,211,238,.6);animation:pulse 2.2s infinite}
+@keyframes pulse{0%{box-shadow:0 0 0 0 rgba(34,211,238,.55)}70%{box-shadow:0 0 0 11px rgba(34,211,238,0)}100%{box-shadow:0 0 0 0 rgba(34,211,238,0)}}
+.back-shop{margin-top:30px;display:inline-flex;align-items:center;gap:10px;padding:14px 28px;border-radius:14px;border:1px solid var(--border);background:rgba(255,255,255,.04);font-family:var(--font-head);font-weight:600;font-size:.95rem;color:var(--txt);transition:all .35s}
+.back-shop:hover{background:rgba(255,255,255,.09);transform:translateY(-3px)}
+.back-shop svg{width:17px;height:17px;stroke:var(--cyan);stroke-width:2.2;fill:none;stroke-linecap:round;stroke-linejoin:round}
+
+/* Toast */
+#toast{position:fixed;bottom:26px;left:50%;transform:translate(-50%,90px);opacity:0;background:rgba(14,14,34,.95);border:1px solid rgba(52,211,153,.55);color:var(--txt);padding:14px 24px;border-radius:14px;font-size:.9rem;box-shadow:0 18px 50px -12px rgba(0,0,0,.7);backdrop-filter:blur(12px);transition:transform .5s cubic-bezier(.22,1.4,.4,1),opacity .5s;z-index:1300;pointer-events:none;text-align:center;max-width:min(92vw,560px)}
+#toast.show{transform:translate(-50%,0);opacity:1}
+#toast .t-strong{color:#34d399;font-weight:600}
+
+@media(max-width:640px){
+  .discord-card{flex-direction:column;text-align:center}
+  .mail-box{padding:38px 22px 32px}
+  .addr-row{flex-direction:column;gap:14px}
+  .addr{font-size:1.05rem}
+  .btn-copy{width:100%;justify-content:center;padding:13px 18px}
+}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}.mail-box,.discord-card{opacity:1;transform:none}}
+</style>
+<noscript><style>.mail-box,.discord-card{opacity:1;transform:none}</style></noscript>
+</head>
+<body>
+
+<div class="aurora" aria-hidden="true">
+  <div class="blob blob-1"></div><div class="blob blob-2"></div><div class="blob blob-3"></div>
+</div>
+<div class="grid-overlay" aria-hidden="true"></div>
+
+<header>
+  <a href="index.html" class="logo" aria-label="NovaIA — retour à la boutique">
+    <svg class="mark" viewBox="0 0 100 100" aria-hidden="true">
+      <defs><linearGradient id="lg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#7c5cff"/><stop offset="1" stop-color="#22d3ee"/></linearGradient></defs>
+      <rect width="100" height="100" rx="26" fill="#0a0a22"/>
+      <path d="M54 12 26 56h20l-8 32 34-44H50z" fill="url(#lg)"/>
+    </svg>
+    Nova<span class="accent">IA</span>
+  </a>
+  <a href="index.html" class="back"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 12H5M11 18l-6-6 6-6"/></svg>Retour à la boutique</a>
+</header>
+
+<main class="page">
+  <span class="kicker">Contact</span>
+  <h1>Écrivez-nous,<br><span class="grad">on répond vite.</span></h1>
+  <p class="lead">Un devis, une question, un projet sur mesure&nbsp;? Copiez notre adresse en un clic et envoyez-nous un email — réponse garantie sous 24&nbsp;h ouvrées.</p>
+
+  <!-- ═══ LE CARRÉ EMAIL ═══ -->
+  <div class="mail-box">
+    <div class="mail-ico"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="3"/><path d="m3.5 7 8.5 6 8.5-6"/></svg></div>
+    <p class="t1">Notre adresse email</p>
+    <p class="t2">Cliquez sur «&nbsp;Copier&nbsp;», collez-la dans votre messagerie et c'est parti.</p>
+    <div class="addr-row">
+      <span class="addr" id="mailAddr"></span>
+      <button class="btn-copy" id="copyBtn" aria-label="Copier l'adresse email">
+        <svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><rect x="9" y="9" width="12" height="12" rx="2"/><path d="M5 15V5a2 2 0 0 1 2-2h10"/></svg>
+        <svg class="ck" viewBox="0 0 24 24" aria-hidden="true" style="display:none;width:15px;height:15px"><path d="M4 12.5 9.5 18 20 6" stroke="#fff" stroke-width="2.4" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <span class="lbl" id="copyLbl">Copier</span>
+      </button>
+    </div>
+    <p class="hint">💡 Astuce&nbsp;: <b>Ctrl/Cmd&nbsp;+&nbsp;V</b> dans Gmail, Outlook ou Proton&nbsp;— l'adresse est exactement celle affichée ci-dessus.</p>
+  </div>
+
+  <!-- ═══ CARTE DISCORD ═══ -->
+  <div class="discord-card">
+    <div class="dc-ico"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20.3 4.4A17 17 0 0 0 16 3l-.3.6a12 12 0 0 1 3.5 1.7 16 16 0 0 0-14.4 0A12 12 0 0 1 8.3 3.6L8 3a17 17 0 0 0-4.3 1.4C1.7 8.7 1 12.6 1.4 16.4a17 17 0 0 0 5.2 2.6l.6-1a11 11 0 0 1-1.7-.8l.4-.3a12 12 0 0 0 10.2 0l.4.3c-.5.3-1.1.6-1.7.8l.6 1a17 17 0 0 0 5.2-2.6c.5-4.4-.7-8.3-3.3-12ZM8.6 14.2c-1 0-1.8-.9-1.8-2s.8-2 1.8-2 1.8.9 1.8 2-.8 2-1.8 2Zm6.8 0c-1 0-1.8-.9-1.8-2s.8-2 1.8-2 1.8.9 1.8 2-.8 2-1.8 2Z"/></svg></div>
+    <div class="dc-txt">
+      <h3>Discord — la voie rapide</h3>
+      <p>Rejoignez le serveur pour discuter en direct avec l'équipe et la communauté.</p>
+    </div>
+    <button class="btn-dc" data-discord-btn>
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20.3 4.4A17 17 0 0 0 16 3l-.3.6a12 12 0 0 1 3.5 1.7 16 16 0 0 0-14.4 0A12 12 0 0 1 8.3 3.6L8 3a17 17 0 0 0-4.3 1.4C1.7 8.7 1 12.6 1.4 16.4a17 17 0 0 0 5.2 2.6l.6-1a11 11 0 0 1-1.7-.8l.4-.3a12 12 0 0 0 10.2 0l.4.3c-.5.3-1.1.6-1.7.8l.6 1a17 17 0 0 0 5.2-2.6c.5-4.4-.7-8.3-3.3-12ZM8.6 14.2c-1 0-1.8-.9-1.8-2s.8-2 1.8-2 1.8.9 1.8 2-.8 2-1.8 2Zm6.8 0c-1 0-1.8-.9-1.8-2s.8-2 1.8-2 1.8.9 1.8 2-.8 2-1.8 2Z"/></svg>
+      Rejoindre
+    </button>
+  </div>
+
+  <div class="stat-line"><span class="dot"></span>Réponse sous 24&nbsp;h ouvrées — devis gratuit et sans engagement</div>
+  <a href="index.html" class="back-shop"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>Revoir les services</a>
+</main>
+
+<div id="toast" role="status" aria-live="polite"></div>
+
+<script>
+(function(){
+"use strict";
+const $ = s => document.querySelector(s);
+const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+/* ---------- Toast ---------- */
+const toast = $("#toast");
+let toastTimer = null;
+function showToast(html){
+  toast.innerHTML = html;
+  toast.classList.add("show");
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => toast.classList.remove("show"), 4200);
+}
+
+/* ---------- Email dans le carré ---------- */
+const addr = $("#mailAddr");
+const copyBtn = $("#copyBtn");
+const copyLbl = $("#copyLbl");
+const mail = (typeof MAIL_CONTACT === "string" && MAIL_CONTACT.trim()) ? MAIL_CONTACT.trim() : "";
+addr.textContent = mail || "configurez MAIL_CONTACT dans config.js";
+
+function flipCopy(ok){
+  copyBtn.classList.toggle("copied", ok);
+  copyLbl.innerHTML = ok ? "Copié&nbsp;!" : "Copier";
+  if (ok){
+    copyBtn.querySelector(".ic").style.display = "none";
+    copyBtn.querySelector(".ck").style.display = "inline";
+    showToast("✅ <span class='t-strong'>Adresse copiée&nbsp;!</span> Collez-la avec Ctrl/Cmd&nbsp;+&nbsp;V dans votre messagerie.");
+    setTimeout(() => {
+      copyBtn.classList.remove("copied");
+      copyLbl.innerHTML = "Copier";
+      copyBtn.querySelector(".ic").style.display = "";
+      copyBtn.querySelector(".ck").style.display = "none";
+    }, 2400);
+  }
+}
+
+copyBtn.addEventListener("click", () => {
+  if (navigator.clipboard && navigator.clipboard.writeText){
+    navigator.clipboard.writeText(mail).then(() => flipCopy(true), () => fallbackCopy());
+  } else {
+    fallbackCopy();
+  }
+});
+
+function fallbackCopy(){
+  try{
+    const ta = document.createElement("textarea");
+    ta.value = mail;
+    ta.setAttribute("readonly", "");
+    ta.style.position = "fixed";
+    ta.style.opacity = "0";
+    document.body.appendChild(ta);
+    ta.select();
+    const ok = document.execCommand("copy");
+    document.body.removeChild(ta);
+    if (ok) flipCopy(true);
+    else showToast("⚠️ Copie impossible : sélectionnez l'adresse manuellement.");
+  }catch(e){
+    showToast("⚠️ Copie impossible : sélectionnez l'adresse manuellement.");
+  }
+}
+
+/* ---------- Bouton Discord ---------- */
+$$All("[data-discord-btn], a[data-discord]").forEach(el => {
+  el.style.cursor = "pointer";
+  el.addEventListener("click", e => {
+    const invite = (typeof DISCORD_INVITE === "string") ? DISCORD_INVITE : "";
+    if (invite && !/VOTRE_INVITE/i.test(invite)){
+      e.preventDefault();
+      window.open(invite, "_blank", "noopener,noreferrer");
+    } else {
+      e.preventDefault();
+      showToast("⚠️ <span class='t-strong'>Lien Discord non configuré</span>.<br>Ouvrez <b>config.js</b> et collez votre invitation dans <b>DISCORD_INVITE</b>.");
+    }
+  });
+});
+function $$All(s){ return Array.from(document.querySelectorAll(s)); }
+})();
+</script>
+</body>
+</html>
